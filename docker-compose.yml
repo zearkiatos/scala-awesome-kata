@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scala-awesome-kata
+    volumes:
+      - ".:/app"
+    tty: true
