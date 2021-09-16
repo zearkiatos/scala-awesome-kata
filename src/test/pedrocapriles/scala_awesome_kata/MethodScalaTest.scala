@@ -13,9 +13,24 @@ final class MethodScalaTest extends WordSpec with GivenWhenThen {
       When("Return a greeting with a delay")
 
       val expectedValue = "Hi!"
-      lazy val greeting = methodScala.delay()
-      println(expectedValue)
+      val greeting = methodScala.delay
       Then("It should return a greeting")
+
+      greeting shouldBe expectedValue
+    }
+  }
+
+    "MethodScalaTest" should {
+    "return a greeting with some name" in {
+      Given("a MethodScalaTest")
+
+      val methodScala = new MethodScala
+
+      When("Return a greeting with a name")
+
+      val expectedValue = "Hi Pedro"
+      val greeting = methodScala.greeting("Pedro")
+      Then("It should return a greeting with name Pedro")
 
       greeting shouldBe expectedValue
     }
