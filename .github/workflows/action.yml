@@ -1,0 +1,26 @@
+name: Scala CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: 
+      name: staging
+    strategy:
+      matrix:
+        scala: [2.12.14]
+        java: [adopt@1.8]
+    steps:
+    - name: Setup Java and Scala
+      uses: olafurpg/setup-scala@v13
+      with:
+        java-version: ${{ matrix.java }}
+    - name: Generate build number
+      run: echo "The build number $GITHUB_RUN_NUMBER 🏗"
+    - name: Build
+      run: sbt build
+    - name: Test 🧪
+      run: sbt test
+    - name: Build docker 🐳
+      run: docker build . -t=scala-awesome-kata:ghb-$GITHUB_RUN_NUMBER
