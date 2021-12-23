@@ -1,0 +1,36 @@
+image: hseeberger/scala-sbt:8u222_1.3.5_2.13.1
+stages:
+  - build
+  - test
+  - docker
+
+build-app:
+  stage: build
+  environment: staging
+  script:
+    - echo "Build application 🏗"
+    - sbt build
+
+test-app:
+  stage: test
+  dependencies:
+    - build-app
+  script:
+    - echo "Test application 🧪"
+    - sbt test
+
+build-docker:
+  image: docker:latest
+  variables:
+    DOCKER_DRIVER: overlay
+    CRYPTOGRAPHY_DONT_BUILD_RUST: 1
+  services:
+    - docker:dind
+  stage: docker
+  dependencies:
+    - build-app
+    - test-app
+  environment: staging
+  script:
+    - echo "Build docker 🐳"
+    - docker build . -t=react-native-post-app:glb-${CI_PIPELINE_IID}
